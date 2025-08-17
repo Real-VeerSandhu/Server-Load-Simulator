@@ -1,0 +1,14 @@
+simulation:
+  servers: 3
+  arrival_rate: 2.0
+  processing_time: 1.0
+  processing_variance: 0.3
+
+display:
+  refresh_rate: 10  # Hz
+  chart_width: 60
+  show_histograms: true
+
+rust_engine:
+  library_path: "./rust-engine/target/release/libqueue_engine.dylib"
+  max_batch_size: 1000

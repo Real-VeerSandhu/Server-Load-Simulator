@@ -68,9 +68,9 @@ impl ServerState {
 
 pub struct TaskGenerator {
     next_id: u64,
-    arrival_rate: f64,
-    processing_time: f64,
-    processing_variance: f64,
+    pub arrival_rate: f64,
+    pub processing_time: f64,
+    pub processing_variance: f64,
 }
 
 impl TaskGenerator {

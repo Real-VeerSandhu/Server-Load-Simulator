@@ -1,7 +1,6 @@
 use crate::queue::{ServerState, Task, TaskGenerator, select_least_loaded_server};
 use crate::statistics::{StatisticsSnapshot, calculate_statistics};
 use std::slice;
-use std::ffi::c_void;
 
 #[repr(C)]
 pub struct ProcessingResult {

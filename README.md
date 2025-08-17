@@ -2,7 +2,7 @@
 
 A high-performance real-time simulation system that models server load balancing and queue management, built with Ruby for interactive CLI and Rust for computational performance.
 
-## 🎯 Overview
+## Overview
 
 This simulator creates a realistic environment where you can observe and control multiple servers processing incoming tasks in real-time. Watch as tasks queue up, servers get busy, and performance metrics change dynamically based on your configuration.
 
@@ -13,7 +13,7 @@ This simulator creates a realistic environment where you can observe and control
 - Interactive Ruby CLI for easy monitoring and control
 - Realistic server load balancing algorithms
 
-## 🏗️ Architecture
+## Architecture
 
 The project leverages the strengths of both languages:
 
@@ -29,13 +29,13 @@ The project leverages the strengths of both languages:
 - **Load Balancing Algorithms**: Efficient server selection and task distribution
 - **Random Task Generator**: High-volume task creation with configurable patterns
 
-## 📋 Prerequisites
+## Prerequisites
 
 - **Ruby** 3.0+ with bundler
 - **Rust** 1.70+ with Cargo
 - **System**: Linux, macOS, or Windows with WSL
 
-## 🚀 Installation
+## Installation
 
 ### 1. Clone the Repository
 ```bash
@@ -60,7 +60,7 @@ bundle install
 ./setup.sh  # Links Rust library for Ruby FFI
 ```
 
-## 🎮 Usage
+## Usage
 
 ### Basic Simulation
 ```bash
@@ -80,7 +80,7 @@ ruby simulator.rb --servers 5 --arrival-rate 2.5 --processing-time 1.0
 - `reset`: Reset simulation state
 - `q`: Quit simulation
 
-## 📊 Sample Output
+## Sample Output
 
 ```
 ┌─ Real-Time Server Load Simulator ─┐
@@ -107,7 +107,7 @@ Live Statistics:
 > r 3.0  # Increase arrival rate to 3.0 tasks/sec
 ```
 
-## 🔧 Configuration
+## Configuration
 
 ### Environment Variables
 ```bash
@@ -134,7 +134,7 @@ rust_engine:
   max_batch_size: 1000
 ```
 
-## 🧪 Rust-Ruby Integration
+## Rust-Ruby Integration
 
 ### FFI Interface
 The Rust engine exposes a C-compatible API that Ruby calls via the `ffi` gem:
@@ -181,7 +181,7 @@ end
 - **Memory efficient** batch processing of server operations
 - **Thread-safe** Rust components allow parallel processing
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 queue-server-simulator/
@@ -211,7 +211,7 @@ queue-server-simulator/
     └── custom_algorithms.rb
 ```
 
-## 🎛️ Simulation Parameters
+## Simulation Parameters
 
 | Parameter | Description | Default | Range |
 |-----------|-------------|---------|--------|
@@ -221,7 +221,7 @@ queue-server-simulator/
 | `processing_variance` | Std deviation of processing time | 0.3 | 0.0-2.0 |
 | `max_queue_size` | Maximum tasks per server queue | 20 | 5-100 |
 
-## 📈 Performance Benchmarks
+## Performance Benchmarks
 
 On a typical development machine (i7-8565U, 16GB RAM):
 
@@ -232,7 +232,7 @@ On a typical development machine (i7-8565U, 16GB RAM):
 | Load balancing decisions | 3ms | 0.1ms | 30x |
 | Memory usage (10k tasks) | 180MB | 25MB | 7.2x less |
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Run Ruby tests
@@ -248,7 +248,7 @@ cd rust-engine && cargo test
 cd rust-engine && cargo bench
 ```
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
@@ -272,22 +272,6 @@ bundle exec rubocop -a
 cargo fmt
 ```
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Inspired by queueing theory and real-world server load balancing
-- Built with the excellent `ffi` gem for Ruby-Rust integration
-- ASCII art and terminal UI inspired by `htop` and similar system monitors
-
-## 📞 Support
-
-- **Issues**: [GitHub Issues](https://github.com/yourusername/queue-server-simulator/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/queue-server-simulator/discussions)
-- **Documentation**: [Wiki](https://github.com/yourusername/queue-server-simulator/wiki)
-
----
-
-**Happy Simulating!** 🚀

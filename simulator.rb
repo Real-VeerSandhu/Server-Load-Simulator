@@ -23,25 +23,16 @@ class Simulator
   end
 
   def initialize_simulation
-    # Initialize Rust engine
-    RustEngine.init_engine(@arrival_rate, @processing_time, @processing_variance)
-    
-    # Create servers
-    cleanup_servers
+    # Create servers (simplified - no FFI for prototype)
     @servers = []
-    @server_pointers = []
-    
     @servers_count.times do |i|
       server = Server.new(i)
-      server_ptr = RustEngine.create_server(i)
       @servers << server
-      @server_pointers << server_ptr
     end
   end
 
   def cleanup_servers
-    @server_pointers.each { |ptr| RustEngine.free_server(ptr) }
-    @server_pointers.clear
+    # No cleanup needed for simplified version
   end
 
   def run
@@ -66,23 +57,12 @@ class Simulator
       delta_time = current_time - @last_update
       @last_update = current_time
       
-      # Process simulation step
-      if !@server_pointers.empty?
-        servers_array = FFI::MemoryPointer.new(RustEngine::ServerState, @servers_count)
-        
-        result = RustEngine.process_simulation_step(
-          servers_array,
-          @servers_count,
-          delta_time,
-          current_time - @start_time
-        )
-        
-        # Update server states (simplified for prototype)
-        @servers.each_with_index do |server, idx|
-          server.instance_variable_set(:@queue_length, rand(0..10))
-          server.instance_variable_set(:@is_busy, rand < 0.6)
-          server.instance_variable_set(:@total_processed, server.total_processed + rand(0..2))
-        end
+      # Simulate server activity (simplified for prototype)
+      @servers.each do |server|
+        # Simulate random queue changes
+        server.instance_variable_set(:@queue_length, rand(0..10))
+        server.instance_variable_set(:@is_busy, rand < (@arrival_rate / @servers_count * @processing_time))
+        server.instance_variable_set(:@total_processed, server.total_processed + rand(0..2))
       end
 
       # Get statistics
@@ -103,28 +83,23 @@ class Simulator
   end
 
   def get_current_statistics
-    if !@server_pointers.empty?
-      servers_array = FFI::MemoryPointer.new(RustEngine::ServerState, @servers_count)
-      time_window = Time.now - @start_time
-      
-      rust_stats = RustEngine.get_statistics(servers_array, @servers_count, time_window)
-      
-      {
-        current_throughput: rust_stats[:current_throughput],
-        average_wait_time: rust_stats[:average_wait_time],
-        server_utilization: rust_stats[:server_utilization],
-        total_queue_length: rust_stats[:total_queue_length],
-        completed_tasks: rust_stats[:completed_tasks]
-      }
-    else
-      {
-        current_throughput: 0.0,
-        average_wait_time: 0.0,
-        server_utilization: 0.0,
-        total_queue_length: 0,
-        completed_tasks: 0
-      }
-    end
+    # Calculate statistics from Ruby server data (simplified for prototype)
+    total_queue_length = @servers.sum(&:queue_length)
+    busy_servers = @servers.count(&:is_busy)
+    server_utilization = @servers.empty? ? 0.0 : (busy_servers.to_f / @servers.count * 100.0)
+    
+    # Simulate realistic statistics based on parameters
+    current_throughput = @arrival_rate * (server_utilization / 100.0)
+    average_wait_time = total_queue_length > 0 ? (total_queue_length.to_f / @arrival_rate) : 0.0
+    completed_tasks = @servers.sum(&:total_processed)
+    
+    {
+      current_throughput: current_throughput,
+      average_wait_time: average_wait_time,
+      server_utilization: server_utilization,
+      total_queue_length: total_queue_length,
+      completed_tasks: completed_tasks
+    }
   end
 
   def handle_input

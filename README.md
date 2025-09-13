@@ -2,6 +2,31 @@
 
 A high-performance real-time simulation system that models server load balancing and queue management, built with Ruby for interactive CLI and Rust for computational performance.
 
+```
+┌─ Real-Time Server Load Simulator ─┐
+│ Servers: 4 | Arrival Rate: 2.1/s  │
+│ Processing Time: 0.8s ± 0.2s      │
+└────────────────────────────────────┘
+
+Server Queues:
+Server 1: ████████░░ (8/10) [BUSY]
+Server 2: ██░░░░░░░░ (2/10) [IDLE] 
+Server 3: ██████████ (10/10) [BUSY]
+Server 4: █████░░░░░ (5/10) [BUSY]
+
+Live Statistics:
+┌─────────────────┬────────┬────────┬────────┐
+│     Metric      │  Now   │  Avg   │  Peak  │
+├─────────────────┼────────┼────────┼────────┤
+│ Tasks/sec       │   2.3  │   2.1  │   3.4  │
+│ Avg Wait (ms)   │  450   │  380   │  1200  │
+│ Server Util.    │  75%   │  68%   │   95%  │
+│ Queue Length    │   25   │   18   │   42   │
+└─────────────────┴────────┴────────┴────────┘
+
+> r 3.0  # Increase arrival rate to 3.0 tasks/sec
+```
+
 ## Overview
 
 This simulator creates a realistic environment where you can observe and control multiple servers processing incoming tasks in real-time. Watch as tasks queue up, servers get busy, and performance metrics change dynamically based on your configuration.
@@ -79,33 +104,6 @@ ruby simulator.rb --servers 5 --arrival-rate 2.5 --processing-time 1.0
 - `stats`: Show detailed statistics
 - `reset`: Reset simulation state
 - `q`: Quit simulation
-
-## Sample Output
-
-```
-┌─ Real-Time Server Load Simulator ─┐
-│ Servers: 4 | Arrival Rate: 2.1/s  │
-│ Processing Time: 0.8s ± 0.2s      │
-└────────────────────────────────────┘
-
-Server Queues:
-Server 1: ████████░░ (8/10) [BUSY]
-Server 2: ██░░░░░░░░ (2/10) [IDLE] 
-Server 3: ██████████ (10/10) [BUSY]
-Server 4: █████░░░░░ (5/10) [BUSY]
-
-Live Statistics:
-┌─────────────────┬────────┬────────┬────────┐
-│     Metric      │  Now   │  Avg   │  Peak  │
-├─────────────────┼────────┼────────┼────────┤
-│ Tasks/sec       │   2.3  │   2.1  │   3.4  │
-│ Avg Wait (ms)   │  450   │  380   │  1200  │
-│ Server Util.    │  75%   │  68%   │   95%  │
-│ Queue Length    │   25   │   18   │   42   │
-└─────────────────┴────────┴────────┴────────┘
-
-> r 3.0  # Increase arrival rate to 3.0 tasks/sec
-```
 
 ## Configuration
 

@@ -1,6 +1,5 @@
 use crate::queue::{Task, ServerState};
 
-#[repr(C)]
 #[derive(Debug, Clone)]
 pub struct StatisticsSnapshot {
     pub current_throughput: f64,

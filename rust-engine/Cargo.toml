@@ -3,10 +3,11 @@ name = "queue_engine"
 version = "0.1.0"
 edition = "2021"
 
-[lib]
-name = "queue_engine"
-crate-type = ["cdylib"]
+[[bin]]
+name = "simulator"
+path = "src/main.rs"
 
 [dependencies]
 rand = "0.8"
 serde = { version = "1.0", features = ["derive"] }
+crossterm = "0.27"

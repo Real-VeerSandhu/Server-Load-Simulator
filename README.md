@@ -1,6 +1,6 @@
 # Real-Time Queue & Server Load Simulator
 
-A high-performance real-time simulation system that models server load balancing and queue management, built with Ruby for interactive CLI and Rust for computational performance.
+A high-performance real-time simulation system that models server load balancing and queue management, built entirely in Rust for maximum performance and efficiency.
 
 ```
 ┌─ Real-Time Server Load Simulator ─┐
@@ -32,89 +32,122 @@ Live Statistics:
 This simulator creates a realistic environment where you can observe and control multiple servers processing incoming tasks in real-time. Watch as tasks queue up, servers get busy, and performance metrics change dynamically based on your configuration.
 
 **Key Features:**
+
 - Real-time visualization with ASCII charts and live statistics
 - Dynamic control of simulation parameters while running
-- High-performance task processing using Rust
-- Interactive Ruby CLI for easy monitoring and control
+- High-performance task processing using pure Rust
+- Interactive CLI for easy monitoring and control
 - Realistic server load balancing algorithms
 
 ## Architecture
 
-The project leverages the strengths of both languages:
+The project leverages Rust's performance and safety features:
 
-### Ruby Components
-- **Interactive CLI**: Real-time input handling and user commands
-- **Visualization**: ASCII charts, progress bars, and live statistics display  
-- **Simulation Orchestration**: Main event loop and timing control
-- **Configuration Management**: Parameter validation and dynamic updates
+### Core Components
 
-### Rust Components  
 - **Task Processing Engine**: High-speed queue operations and task lifecycle management
 - **Statistics Calculator**: Real-time computation of metrics (latency, throughput, utilization)
 - **Load Balancing Algorithms**: Efficient server selection and task distribution
 - **Random Task Generator**: High-volume task creation with configurable patterns
+- **Interactive Display**: ASCII-based real-time visualization
+- **Command Interface**: Non-blocking input handling for dynamic control
 
 ## Prerequisites
 
-- **Ruby** 3.0+ with bundler
 - **Rust** 1.70+ with Cargo
 - **System**: Linux, macOS, or Windows with WSL
 
 ## Installation
 
 ### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/yourusername/queue-server-simulator.git
 cd queue-server-simulator
 ```
 
-### 2. Build Rust Components
+### 2. Build the Simulator
+
 ```bash
 cd rust-engine
 cargo build --release
-cd ..
-```
-
-### 3. Install Ruby Dependencies
-```bash
-bundle install
-```
-
-### 4. Run Setup Script
-```bash
-./setup.sh  # Links Rust library for Ruby FFI
 ```
 
 ## Usage
 
 ### Basic Simulation
+
 ```bash
-ruby simulator.rb
+cd rust-engine
+cargo run --bin simulator
 ```
 
 ### Advanced Configuration
+
 ```bash
-ruby simulator.rb --servers 5 --arrival-rate 2.5 --processing-time 1.0
+cargo run --bin simulator -- --servers 5 --arrival-rate 2.5 --processing-time 1.0
 ```
 
 ### Interactive Commands (while running)
+
 - `s <num>`: Change number of servers
-- `r <rate>`: Adjust task arrival rate  
+- `r <rate>`: Adjust task arrival rate
 - `p <time>`: Modify processing time
-- `stats`: Show detailed statistics
-- `reset`: Reset simulation state
 - `q`: Quit simulation
 
+<<<<<<< HEAD
+=======
+## Sample Output
+
+```text
+┌─ Real-Time Server Load Simulator ─┐
+│ Servers: 4 | Arrival Rate: 2.1/s  │
+│ Processing Time: 0.8s ± 0.3s      │
+└───────────────────────────────────┘
+
+Server Queues:
+Server 1: ████████░░ (8/10) [BUSY]
+Server 2: ██░░░░░░░░ (2/10) [IDLE] 
+Server 3: ██████████ (10/10) [BUSY]
+Server 4: █████░░░░░ (5/10) [BUSY]
+
+Live Statistics:
+┌─────────────────┬────────┬────────┬────────┐
+│     Metric      │  Now   │  Avg   │  Peak  │
+├─────────────────┼────────┼────────┼────────┤
+│ Tasks/sec       │   2.3  │   2.1  │   3.4  │
+│ Avg Wait (ms)   │  450   │  380   │  1200  │
+│ Server Util.    │  75%   │  68%   │   95%  │
+│ Queue Length    │   25   │   18   │   42   │
+└─────────────────┴────────┴────────┴────────┘
+│ Completed Tasks:         1234              │
+└────────────────────────────────────────────┘
+
+Interactive Commands:
+  s <num> - Change number of servers
+  r <rate> - Adjust task arrival rate
+  p <time> - Modify processing time
+  q - Quit simulation
+
+> 
+```
+
+>>>>>>> ea2e6af (v0.2)
 ## Configuration
 
-### Environment Variables
+### Command Line Arguments
+
 ```bash
-export RUST_LOG=info                    # Rust logging level
-export SIMULATOR_REFRESH_MS=100         # Display refresh rate
-export MAX_QUEUE_SIZE=50               # Per-server queue limit
+cargo run --bin simulator -- [OPTIONS]
+
+OPTIONS:
+    --servers <NUM>           Number of processing servers [default: 3]
+    --arrival-rate <RATE>    Tasks per second arrival rate [default: 2.0]
+    --processing-time <TIME> Average task processing time in seconds [default: 1.0]
 ```
 
 ### Configuration File (`config.yml`)
+
 ```yaml
 simulation:
   servers: 3
@@ -127,149 +160,79 @@ display:
   chart_width: 60
   show_histograms: true
 
-rust_engine:
-  library_path: "./rust-engine/target/release/libqueue_engine.so"
-  max_batch_size: 1000
+simulator:
+  binary_path: "./rust-engine/target/release/simulator"
+  max_queue_size: 50
 ```
 
-## Rust-Ruby Integration
+### Environment Variables
 
-### FFI Interface
-The Rust engine exposes a C-compatible API that Ruby calls via the `ffi` gem:
-
-```rust
-// Rust side (src/ffi.rs)
-#[no_mangle]
-pub extern "C" fn process_server_queues(
-    server_data: *const ServerState,
-    server_count: usize,
-    delta_time: f64
-) -> ProcessingResult {
-    // High-performance queue processing
-}
-
-#[no_mangle] 
-pub extern "C" fn calculate_statistics(
-    history: *const TaskHistory,
-    history_len: usize
-) -> StatisticsSnapshot {
-    // Real-time stats computation
-}
+```bash
+export RUST_LOG=info                    # Rust logging level
+export SIMULATOR_REFRESH_MS=100         # Display refresh rate
+export MAX_QUEUE_SIZE=50                # Per-server queue limit
 ```
-
-```ruby
-# Ruby side (lib/rust_engine.rb)
-module RustEngine
-  extend FFI::Library
-  ffi_lib './rust-engine/target/release/libqueue_engine.so'
-  
-  attach_function :process_server_queues, 
-                  [:pointer, :size_t, :double], 
-                  ProcessingResult.by_value
-                  
-  attach_function :calculate_statistics,
-                  [:pointer, :size_t],
-                  StatisticsSnapshot.by_value
-end
-```
-
-### Performance Benefits
-- **10-100x faster** queue processing vs pure Ruby
-- **Real-time statistics** calculation for thousands of tasks
-- **Memory efficient** batch processing of server operations
-- **Thread-safe** Rust components allow parallel processing
 
 ## Project Structure
 
-```
+```text
 queue-server-simulator/
 ├── README.md
-├── Gemfile
 ├── config.yml
-├── simulator.rb              # Main Ruby entry point
-├── lib/
-│   ├── simulator/
-│   │   ├── cli.rb           # Interactive command interface
-│   │   ├── display.rb       # ASCII visualization
-│   │   ├── server.rb        # Ruby server abstraction
-│   │   └── stats.rb         # Statistics aggregation
-│   └── rust_engine.rb       # FFI bindings to Rust
-├── rust-engine/
-│   ├── Cargo.toml
-│   ├── src/
-│   │   ├── lib.rs
-│   │   ├── ffi.rs           # C FFI exports
-│   │   ├── queue.rs         # Queue processing engine
-│   │   ├── statistics.rs    # Performance calculations  
-│   │   └── load_balancer.rs # Server selection algorithms
-│   └── benches/             # Performance benchmarks
-└── examples/
-    ├── basic_simulation.rb
-    ├── stress_test.rb
-    └── custom_algorithms.rb
+└── rust-engine/
+    ├── Cargo.toml
+    ├── src/
+    │   ├── main.rs              # Main application entry point
+    │   ├── lib.rs               # Library exports
+    │   ├── queue.rs             # Queue processing engine
+    │   ├── statistics.rs        # Performance calculations  
+    │   └── display.rs            # ASCII visualization
+    └── target/                   # Build artifacts
 ```
-
-## Simulation Parameters
-
-| Parameter | Description | Default | Range |
-|-----------|-------------|---------|--------|
-| `servers` | Number of processing servers | 3 | 1-20 |
-| `arrival_rate` | Tasks per second arrival rate | 2.0 | 0.1-50.0 |
-| `processing_time` | Average task processing time (seconds) | 1.0 | 0.1-10.0 |
-| `processing_variance` | Std deviation of processing time | 0.3 | 0.0-2.0 |
-| `max_queue_size` | Maximum tasks per server queue | 20 | 5-100 |
-
-## Performance Benchmarks
-
-On a typical development machine (i7-8565U, 16GB RAM):
-
-| Operation | Pure Ruby | Ruby+Rust | Speedup |
-|-----------|-----------|-----------|---------|
-| Queue processing (1000 tasks) | 45ms | 0.8ms | 56x |
-| Statistics calculation | 12ms | 0.2ms | 60x |
-| Load balancing decisions | 3ms | 0.1ms | 30x |
-| Memory usage (10k tasks) | 180MB | 25MB | 7.2x less |
 
 ## Testing
 
 ```bash
-# Run Ruby tests
-bundle exec rspec
-
 # Run Rust tests  
 cd rust-engine && cargo test
 
-# Run integration tests
-./scripts/integration_test.sh
+# Run with debug logging
+RUST_LOG=debug cargo run --bin simulator
 
 # Performance benchmarks
 cd rust-engine && cargo bench
 ```
 
-## Contributing
+## Development
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Run tests to ensure everything works
-4. Commit your changes (`git commit -m 'Add amazing feature'`)
-5. Push to the branch (`git push origin feature/amazing-feature`)
-6. Open a Pull Request
+### Building
 
-### Development Setup
 ```bash
-# Install development dependencies
-bundle install --with development
-rustup component add clippy rustfmt
+# Debug build
+cargo build
 
-# Run linting
-bundle exec rubocop
+# Release build (optimized)
+cargo build --release
+
+# Run tests
+cargo test
+
+# Run linter
 cargo clippy
 
 # Format code
-bundle exec rubocop -a
 cargo fmt
 ```
 
-## License
+### Development Setup
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+```bash
+# Install Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Add development components
+rustup component add clippy rustfmt
+
+# Run development version
+cargo run --bin simulator -- --servers 5 --arrival-rate 3.0
+```

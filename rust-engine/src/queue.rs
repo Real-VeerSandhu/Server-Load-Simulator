@@ -1,7 +1,6 @@
 use rand::Rng;
 use std::collections::VecDeque;
 
-#[repr(C)]
 #[derive(Debug, Clone)]
 pub struct Task {
     pub id: u64,
@@ -11,7 +10,6 @@ pub struct Task {
     pub completion_time: f64,
 }
 
-#[repr(C)]
 #[derive(Debug)]
 pub struct ServerState {
     pub id: usize,

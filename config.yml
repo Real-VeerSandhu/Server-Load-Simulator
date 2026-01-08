@@ -9,6 +9,6 @@ display:
   chart_width: 60
   show_histograms: true
 
-rust_engine:
-  library_path: "./rust-engine/target/release/libqueue_engine.dylib"
-  max_batch_size: 1000
+simulator:
+  binary_path: "./rust-engine/target/release/simulator"
+  max_queue_size: 50

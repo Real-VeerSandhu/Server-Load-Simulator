@@ -6,7 +6,7 @@ A high-performance real-time simulation system that models server load balancing
 ┌─ Real-Time Server Load Simulator ─┐
 │ Servers: 4 | Arrival Rate: 2.1/s  │
 │ Processing Time: 0.8s ± 0.2s      │
-└────────────────────────────────────┘
+└───────────────────────────────────┘
 
 Server Queues:
 Server 1: ████████░░ (8/10) [BUSY]
